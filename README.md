@@ -15,12 +15,14 @@ syntactically valid, with the exact error position when they are not.
 
 
 syntax_checker/
-├── lexer.py          # Tokenizer: source string -> list of Tokens
-├── syntax_parser.py  # Recursive-descent parser + check_syntax() API
-├── main.py            # CLI: interactive mode and file mode
-├── test_cases.txt     # Sample valid/invalid expressions
-└── README.md
+    lexer.py          - Tokenizer: source string -> list of Tokens
+    syntax_parser.py  - Recursive-descent parser + check_syntax() API
+    main.py            - CLI: interactive mode and file mode
+    test_cases.txt     - Sample valid/invalid expressions
+    README.md
 
+
+-----
 
 ## Setup
 
@@ -30,6 +32,8 @@ bash
 cd syntax_checker
 python3 main.py
 
+
+-----
 
 ## Usage
 
@@ -49,6 +53,8 @@ quit to exit.
 bash
 python3 main.py test_cases.txt
 
+
+-----
 
 ## The Grammar
 
@@ -75,8 +81,10 @@ factor     -> (PLUS | MINUS) factor
 
 Each grammar rule maps directly to one method in Parser (expression(),
 term(), factor()), which is the defining trait of recursive descent.
-The * loops give left-associativity and the rule ordering (expression
+The * loops give left-associativity, and the rule ordering (expression
 calls term calls factor) gives *// higher precedence than +/-.
+
+-----
 
 ## How It Works
 
@@ -90,8 +98,10 @@ calls term calls factor) gives *// higher precedence than +/-.
    grammar expects, it raises ParserSyntaxError with the offending
    position — that’s the syntax check.
 1. Each successful parse also builds an *AST* (abstract syntax tree),
-   useful to show  as proof the parser understood the structure,
+   useful to show in a viva as proof the parser understood the structure,
    not just validated it.
+
+-----
 
 ## Example Output
 
@@ -102,6 +112,27 @@ Syntax Error at position 10: Expected 'RPAREN' but found 'EOF'
 3 + (4 * 2
           ^
 
+
+-----
+
+## Likely Viva Questions
+
+- *Why remove left recursion?* Top-down parsers expand the leftmost
+  nonterminal first; with E -> E + T, that’s an infinite loop. The
+  rewrite using * (Kleene star) keeps the same language without recursion
+  on the left.
+- *What parsing technique is this?* Recursive-descent, a top-down,
+  LL(1)-style technique — one function per nonterminal, one token of
+  lookahead (current()).
+- *Lexer vs parser?* The lexer only validates that characters form
+  legal tokens (no @, no #); it knows nothing about ordering. The
+  parser validates that the token sequence matches the grammar.
+- *How is operator precedence handled?* Structurally — term (which
+  handles *//) is called from inside expression (which handles
+  +/-), so multiplication/division always bind tighter, with no
+  explicit precedence table needed.
+
+-----
 
 ## Possible Extensions
 
