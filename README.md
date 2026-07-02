@@ -1,5 +1,5 @@
 # Simple Arithmetic Expression Syntax Checker
-*Compiler Construction — Course Project*
+*Compiler Construction — *
 
 A syntax checker for arithmetic expressions, built in pure Python with no external libraries: a hand-written **lexer** (tokenizer) and a hand-written **recursive-descent parser**.
 
